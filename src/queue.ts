@@ -41,8 +41,13 @@ export class Queue {
   };
 
   remove = (jobId: string) => {
-    this.items = this.items.filter((i) => i.id !== jobId);
-    console.log(`[${this.size()}] Removed job ${jobId}`);
+    const job = this.items.find((item) => item.id === jobId);
+    if (job) {
+      job.queueId = null;
+
+      this.items = this.items.filter((i) => i.id !== job.id);
+      console.log(`[${this.size()}] Removed job ${job.id}`);
+    }
   };
 
   size = () => {

@@ -9,7 +9,7 @@ interface IJob {
 
 export class Job {
   public id: string;
-  public queueId: string;
+  public queueId: string | null;
   public callback: string;
   public payload?: string | Object;
 
