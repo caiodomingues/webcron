@@ -13,7 +13,7 @@ app.get("/", (_req, res) => {
   manager.addJob(
     new Job({
       callback: "http://localhost:3333/callback",
-      recurrency: 60,
+      recurrency: 0,
       payload: { wee: "wee" },
     })
   );
@@ -21,7 +21,8 @@ app.get("/", (_req, res) => {
   res.status(200).send();
 });
 
-app.post("/callback", (_req, res) => {
+app.post("/callback", (req, res) => {
+  console.log("received: ", req.body);
   res.status(200).send();
 });
 

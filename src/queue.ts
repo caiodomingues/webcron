@@ -4,7 +4,7 @@ import { Job } from "./job";
 
 export class Queue {
   public id: string;
-  public asleep: boolean;
+  public asleep: Date | null;
 
   protected items: Job[];
 
@@ -13,7 +13,7 @@ export class Queue {
   constructor() {
     this.id = randomUUID();
     this.items = [];
-    this.asleep = true;
+    this.asleep = new Date();
 
     this.axios = axios.create({
       headers: {
@@ -80,6 +80,11 @@ export class Queue {
 
           if (job.recurrency > 0) {
             job.setNextCall();
+            console.log(
+              `[${this.size()}] Job ${job.id} will run again in ${
+                job.recurrency
+              } seconds`
+            );
             this.send(job);
           }
         });
@@ -91,12 +96,12 @@ export class Queue {
 
   sleep = () => {
     console.log(`[${this.size()}] Queue ${this.id} is sleeping`);
-    this.asleep = true;
+    this.asleep = new Date();
   };
 
   wakeUp = () => {
     if (this.asleep) {
-      this.asleep = false;
+      this.asleep = null;
       console.log(`[${this.size()}] Queue ${this.id} is awake`);
       this.run();
     }

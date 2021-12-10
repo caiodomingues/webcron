@@ -13,6 +13,9 @@ export class Manager {
   }
 
   public removeQueue(queue: Queue) {
+    console.log(
+      `[${queue.size()}] Queue ${queue.id} slept for 5 minutes, removing...`
+    );
     this.queues = this.queues.filter((q) => q.id !== queue.id);
   }
 
@@ -44,6 +47,13 @@ export class Manager {
 
   public run = () => {
     this.queues.forEach((queue) => {
+      if (
+        queue.asleep instanceof Date &&
+        (new Date().getTime() - queue.asleep.getTime()) / 60000 >= 5
+      ) {
+        this.removeQueue(queue);
+      }
+
       queue.run();
     });
   };
