@@ -1,15 +1,32 @@
 import express from "express";
 import { Job } from "./job";
-import { Queue } from "./queue";
+import { Manager } from "./manager";
 const app = express();
 const port = 3333;
 
-const queue = new Queue();
+const manager = new Manager();
 
 app.use(express.json());
 
-app.get("/", (_req, res) => res.send({ job: queue.send(new Job("")) }));
+app.get("/", (_req, res) => {
+  manager.addJob(
+    new Job({
+      callback: "http://localhost:3333/callback",
+      recurrency: 60,
+      payload: { wee: "wee" },
+    })
+  );
+  
+  res.status(200).send();
+});
 
-setInterval(queue.run, 1000);
+app.post("/callback", (_req, res) => {
+  res.status(200).send();
+});
+
+manager.getQueues().forEach((queue) => {
+  setInterval(queue.run, 1000);
+});
 
 app.listen(port);
+console.log(`Server running on port ${port}`);
