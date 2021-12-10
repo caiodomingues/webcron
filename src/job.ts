@@ -7,13 +7,21 @@ interface IJob {
   queueId?: string;
 }
 
+interface IAnalytics {
+  success: boolean;
+}
+
 export class Job {
   public id: string;
   public queueId: string | null;
   public callback: string;
   public payload?: string | Object;
 
-  public nextCall: Date;
+  public scheduled: number;
+  public failed: number;
+
+  public previousCall: Date | null;
+  public nextCall: Date | null;
   public recurrency: number;
 
   constructor({ callback, payload, recurrency = 0, queueId }: IJob) {
@@ -30,10 +38,22 @@ export class Job {
     if (payload) {
       this.payload = this.normalize(payload);
     }
+
+    this.scheduled = 0;
+    this.failed = 0;
   }
 
   setNextCall = () => {
+    this.previousCall = new Date();
     this.nextCall = new Date(Date.now() + 1000 * this.recurrency);
+  };
+
+  analytics = ({ success }: IAnalytics) => {
+    this.scheduled += 1;
+
+    if (!success) {
+      this.failed += 1;
+    }
   };
 
   normalize = (payload: string | Object) => {

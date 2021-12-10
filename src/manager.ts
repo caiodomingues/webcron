@@ -8,13 +8,22 @@ export class Manager {
     this.queues = [];
   }
 
+  public boot = (): void => {
+    this.run();
+    this.queues.forEach((queue) => {
+      queue.garbageCollector();
+    });
+  };
+
   public addQueue(): void {
     this.queues.push(new Queue());
   }
 
   public removeQueue(queue: Queue) {
     console.log(
-      `[${queue.size()}] Queue ${queue.id} slept for 5 minutes, removing...`
+      `[${queue.size()}/${queue.fails()}] Queue ${
+        queue.id
+      } slept for 5 minutes, removing...`
     );
     this.queues = this.queues.filter((q) => q.id !== queue.id);
   }
@@ -24,9 +33,19 @@ export class Manager {
   }
 
   public removeJob(jobId: string) {
-    this.queues.forEach((queue) => {
-      queue.remove(jobId);
+    const tmp = this.queues.map((queue) => {
+      return queue.remove(jobId);
     });
+
+    return tmp;
+  }
+
+  public retryJob(jobId: string) {
+    const tmp = this.queues.map((queue) => {
+      return queue.retry(jobId);
+    });
+
+    return tmp;
   }
 
   public addJob(job: Job) {
@@ -44,7 +63,11 @@ export class Manager {
 
     this.queues.some((queue) => {
       if (!queue.isFull()) {
-        console.log(`[${queue.size()}] Job ${job.id} attached to ${queue.id}`);
+        console.log(
+          `[${queue.size()}/${queue.fails()}] Job ${job.id} attached to ${
+            queue.id
+          }`
+        );
 
         job.queueId = queue.id;
 

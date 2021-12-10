@@ -13,24 +13,50 @@ app.post("/", ({ body }, res) => {
   if (!body.callback) {
     res.status(422).send({ error: "Callback is required" });
   } else {
-    manager.addJob(
-      new Job({
-        callback: body.callback,
-        recurrency: body.recurrency,
-        payload: body.payload,
-      })
-    );
+    const job = new Job({
+      callback: body.callback,
+      recurrency: body.recurrency,
+      payload: body.payload,
+    });
 
-    res.status(200).send();
+    manager.addJob(job);
+
+    res.status(200).send({
+      messsage: "Job added successfully",
+      job,
+    });
+  }
+});
+
+app.put("/:id", ({ params }, res) => {
+  const job = manager.retryJob(params.id);
+
+  if (job.length > 0) {
+    res.status(200).send({ message: "Job realocated to Queue", job });
+  } else {
+    res.status(404).send({ message: "Job not found" });
   }
 });
 
 app.delete("/:id", ({ params }, res) => {
-  manager.removeJob(params.id);
-  res.status(204).send();
+  const job = manager.removeJob(params.id);
+
+  if (job.length > 0) {
+    res.status(204).send();
+  } else {
+    res.status(404).send({ message: "Job not found" });
+  }
 });
 
-setInterval(manager.run, 1000);
+app.post("/callback", ({ body }, res) => {
+  console.log(body);
+  res.status(200).send({
+    message: "Callback received",
+    body,
+  });
+});
+
+setInterval(manager.boot, 1000);
 
 app.listen(port);
 console.log(`Server running on port ${port}`);
