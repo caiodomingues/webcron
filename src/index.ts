@@ -5,6 +5,7 @@ const app = express();
 const port = 3333;
 
 const manager = new Manager();
+manager.run();
 
 app.use(express.json());
 
@@ -16,7 +17,7 @@ app.get("/", (_req, res) => {
       payload: { wee: "wee" },
     })
   );
-  
+
   res.status(200).send();
 });
 
@@ -24,9 +25,7 @@ app.post("/callback", (_req, res) => {
   res.status(200).send();
 });
 
-manager.getQueues().forEach((queue) => {
-  setInterval(queue.run, 1000);
-});
+setInterval(manager.run, 1000);
 
 app.listen(port);
 console.log(`Server running on port ${port}`);
