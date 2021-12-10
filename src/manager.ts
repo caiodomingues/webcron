@@ -23,6 +23,12 @@ export class Manager {
     return this.queues;
   }
 
+  public removeJob(jobId: string) {
+    this.queues.forEach((queue) => {
+      queue.remove(jobId);
+    });
+  }
+
   public addJob(job: Job) {
     if (this.queues.length === 0) {
       this.addQueue();
@@ -38,7 +44,10 @@ export class Manager {
 
     this.queues.some((queue) => {
       if (!queue.isFull()) {
-        console.log(`[${queue.size()}] Job ${job.id} added to ${queue.id}`);
+        console.log(`[${queue.size()}] Job ${job.id} attached to ${queue.id}`);
+
+        job.queueId = queue.id;
+
         queue.send(job);
         return true;
       }

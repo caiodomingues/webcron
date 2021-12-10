@@ -40,6 +40,11 @@ export class Queue {
     return this.items.shift();
   };
 
+  remove = (jobId: string) => {
+    this.items = this.items.filter((i) => i.id !== jobId);
+    console.log(`[${this.size()}] Removed job ${jobId}`);
+  };
+
   size = () => {
     return this.items.length;
   };
@@ -68,10 +73,7 @@ export class Queue {
       console.log(`[${this.size()}] Queue ${this.id} running job ${job.id}`);
       await axios
         .post(job.callback, {
-          payload:
-            typeof job.payload === "string"
-              ? JSON.parse(job.payload)
-              : job.payload,
+          payload: job.payload,
         })
         .then(() => {
           console.log(
@@ -87,6 +89,10 @@ export class Queue {
             );
             this.send(job);
           }
+        })
+        .catch(() => {
+          console.log(`[${this.size()}] Queue ${this.id} failed job ${job.id}`);
+          this.remove(job.id);
         });
     }
 

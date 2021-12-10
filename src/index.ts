@@ -9,21 +9,25 @@ manager.run();
 
 app.use(express.json());
 
-app.get("/", (_req, res) => {
-  manager.addJob(
-    new Job({
-      callback: "http://localhost:3333/callback",
-      recurrency: 0,
-      payload: { wee: "wee" },
-    })
-  );
+app.post("/", ({ body }, res) => {
+  if (!body.callback) {
+    res.status(422).send({ error: "Callback is required" });
+  } else {
+    manager.addJob(
+      new Job({
+        callback: body.callback,
+        recurrency: body.recurrency,
+        payload: body.payload,
+      })
+    );
 
-  res.status(200).send();
+    res.status(200).send();
+  }
 });
 
-app.post("/callback", (req, res) => {
-  console.log("received: ", req.body);
-  res.status(200).send();
+app.delete("/:id", ({ params }, res) => {
+  manager.removeJob(params.id);
+  res.status(204).send();
 });
 
 setInterval(manager.run, 1000);

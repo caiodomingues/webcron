@@ -1,0 +1,11 @@
+version: "3.7"
+
+services:
+  app:
+    restart: always
+    container_name: Webcron
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3333:3333
