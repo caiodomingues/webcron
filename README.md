@@ -1,8 +1,8 @@
-# Webcron
+# WebCron
 
-Webcron is a simple, easy to use, and powerful cron job scheduler through HTTP requests.
+WebCron is a simple, easy to use, and powerful cron job scheduler through HTTP requests.
 
-## Using Webcron
+## Using WebCron
 
 After cloning the repository and installing the dependencies, you can start using WebCron using Docker, there's a [Dockerfile](./Dockerfile) in the root of the repository, and a [docker-compose.yml](./docker-compose.yml) as well.
 
