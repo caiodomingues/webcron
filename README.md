@@ -28,7 +28,7 @@ Since it's a simple HTTP request, you can create a new job by sending a POST req
 ```
 
 1. The callback is the URL that will be called when the job is executed (It will do a POST request in the URL).
-2. The recurrency (in seconds - leave it as zero to make a single request) of the job and the limit is the number of times the job will be executed before it's deleted (if it does have a recurrency greather than 0).
+2. The recurrency (in seconds - leave it as zero to make a single request) of the job and the limit is the number of times the job will be executed before it's deleted (if it does have a recurrency greather than 0 and the limit is greather than 0 as well).
 3. The payload is the data that will be sent to the callback, it can be a object or a string.
 
 In the example above, the job will run 5 times, in 5 seconds, and will send the payload `{"hello": "world!"}` to the callback (which is the server itself, for testing purposes).
