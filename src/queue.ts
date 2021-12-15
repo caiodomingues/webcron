@@ -109,6 +109,15 @@ export class Queue {
 
       if (!job) return;
 
+      if (job.recurrency > 0 && job.scheduled >= job.limit) {
+        console.log(
+          `[${this.size()}/${this.fails()}] Job ${
+            job.id
+          } limit reached, removing from queue`
+        );
+        return;
+      }
+
       if (job.nextCall && job.nextCall.getTime() >= new Date().getTime()) {
         this.send(job);
         return;

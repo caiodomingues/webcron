@@ -1,9 +1,11 @@
 import { randomUUID } from "crypto";
 
 interface IJob {
+  id?: string;
   callback: string;
   payload?: string | Object;
   recurrency?: number;
+  limit?: number;
   queueId?: string;
 }
 
@@ -23,11 +25,20 @@ export class Job {
   public previousCall: Date | null;
   public nextCall: Date | null;
   public recurrency: number;
+  public limit: number;
 
-  constructor({ callback, payload, recurrency = 0, queueId }: IJob) {
-    this.id = randomUUID();
+  constructor({
+    id,
+    callback,
+    payload,
+    recurrency = 0,
+    limit = 0,
+    queueId,
+  }: IJob) {
+    this.id = id ?? randomUUID();
     this.callback = callback;
     this.recurrency = recurrency;
+    this.limit = limit;
 
     this.setNextCall();
 

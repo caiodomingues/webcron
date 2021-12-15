@@ -1,4 +1,5 @@
 import express from "express";
+import helmet from "helmet";
 import { Job } from "./job";
 import { Manager } from "./manager";
 const app = express();
@@ -8,6 +9,7 @@ const manager = new Manager();
 manager.run();
 
 app.use(express.json());
+app.use(helmet());
 
 app.post("/", ({ body }, res) => {
   if (!body.callback) {
@@ -16,6 +18,7 @@ app.post("/", ({ body }, res) => {
     const job = new Job({
       callback: body.callback,
       recurrency: body.recurrency,
+      limit: body.limit,
       payload: body.payload,
     });
 
