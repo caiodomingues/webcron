@@ -109,7 +109,7 @@ export class Queue {
 
       if (!job) return;
 
-      if (job.recurrency > 0 && job.scheduled >= job.limit) {
+      if (job.recurrency > 0 && job.limit > 0 && job.scheduled >= job.limit) {
         console.log(
           `[${this.size()}/${this.fails()}] Job ${
             job.id
