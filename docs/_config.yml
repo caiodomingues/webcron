@@ -1,5 +1,5 @@
 remote_theme: pages-themes/cayman@v0.2.0
 plugins:
   - jekyll-remote-theme
-title: WebCron | A simple yet powerful cron job scheduler through HTTP requests.
+title: A simple yet powerful cron job scheduler through HTTP requests.
 description: WebCron is a simple, easy to use, and powerful cron job scheduler through HTTP requests.
