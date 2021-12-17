@@ -128,10 +128,8 @@ export class Queue {
           job.id
         }`
       );
-      await axios
-        .post(job.callback, {
-          payload: job.payload,
-        })
+      await this.axios
+        .post(job.callback, job.payload)
         .then(() => {
           console.log(
             `[${this.size()}/${this.fails()}] Queue ${this.id} completed job ${
