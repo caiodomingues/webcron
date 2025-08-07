@@ -3,7 +3,6 @@ build
 coverage
 .vscode
 .DS_STORE
-.env
+.env*
+!.env.example
 tmp
-package-lock.json
-yarn.lock

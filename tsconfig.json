@@ -1,25 +1,14 @@
 {
-  "include": ["**/*"],
-  "exclude": ["node_modules", "build"],
   "compilerOptions": {
-    "experimentalDecorators": true,
-    "outDir": "build",
-    "rootDir": "./src",
-    "baseUrl": "./",
-    "sourceMap": true,
-    "target": "ES2020",
-    "module": "commonjs",
-    "lib": ["ES2020"],
-    "noUnusedLocals": true,
-    "skipLibCheck": true,
-    "incremental": true,
-    "noUnusedParameters": true,
-    "removeComments": true,
-    "declaration": false,
+    "target": "esnext",
+    "module": "esnext",
     "moduleResolution": "node",
-    "strictNullChecks": true,
-    "allowSyntheticDefaultImports": true,
-    "emitDecoratorMetadata": true,
-    "esModuleInterop": true
-  }
+    "outDir": "./build",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": false
+  },
+  "include": ["src"]
 }

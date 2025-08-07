@@ -1,6 +1,6 @@
-import { Job } from "./models/job";
-import { Queue } from "./queue";
-import logger from "./utils/log";
+import { Job } from "../models/job";
+import { Queue } from "../queue";
+import logger from "../utils/log";
 
 export class Manager {
   protected queues: Queue[] = [];

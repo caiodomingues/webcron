@@ -1,8 +1,8 @@
 import { randomUUID } from "crypto";
-import { Job } from "./models/job";
-import logger from "./utils/log";
-import { NetworkError } from "./errors/NetworkError";
-import { queueConfig } from "./config/queue";
+import { Job } from "../models/job";
+import logger from "../utils/log";
+import { NetworkError } from "../errors/NetworkError";
+import { queueConfig } from "../config/queue";
 
 export class Queue {
   public id: string;

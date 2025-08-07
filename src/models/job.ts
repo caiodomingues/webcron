@@ -1,9 +1,9 @@
 import { randomUUID } from "crypto";
 
-interface IJob {
+export interface IJob {
   id?: string;
   callback: string;
-  payload?: string | Object;
+  payload?: string | object;
   recurrency?: number;
   limit?: number;
   queueId?: string;
@@ -17,7 +17,7 @@ export class Job {
   public id: string;
   public queueId: string | null;
   public callback: string;
-  public payload?: string | Object;
+  public payload?: string;
 
   public scheduled: number;
   public failed: number;
@@ -27,31 +27,20 @@ export class Job {
   public recurrency: number;
   public limit: number;
 
-  constructor({
-    id,
-    callback,
-    payload,
-    recurrency = 0,
-    limit = 0,
-    queueId,
-  }: IJob) {
+  constructor({ id, callback, payload, recurrency = 0, limit = 0, queueId }: IJob) {
     this.id = id ?? randomUUID();
     this.callback = callback;
     this.recurrency = recurrency;
     this.limit = limit;
-
-    this.setNextCall();
-
-    if (queueId) {
-      this.queueId = queueId;
-    }
-
-    if (payload) {
-      this.payload = this.normalize(payload);
-    }
-
+    this.queueId = queueId ?? null;
+    this.previousCall = null;
+    this.nextCall = null;
     this.scheduled = 0;
     this.failed = 0;
+    this.setNextCall();
+    if (payload !== undefined) {
+      this.payload = Job.normalize(payload);
+    }
   }
 
   setNextCall = () => {
@@ -61,17 +50,16 @@ export class Job {
 
   analytics = ({ success }: IAnalytics) => {
     this.scheduled += 1;
-
     if (!success) {
       this.failed += 1;
     }
   };
 
-  normalize = (payload: string | Object) => {
+  static normalize(payload: string | object): string {
     if (typeof payload === "string") {
       return payload;
     } else {
       return JSON.stringify(payload);
     }
-  };
+  }
 }
