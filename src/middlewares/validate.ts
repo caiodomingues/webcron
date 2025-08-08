@@ -1,12 +1,14 @@
 import { Request, Response, NextFunction } from "express";
-import { ZodTypeAny } from "zod";
-import { ValidationError } from "../errors/ValidationError";
+import { ZodType } from "zod";
 
-export function validateBody(schema: ZodTypeAny) {
-  return (req: Request, _res: Response, next: NextFunction) => {
+export function validateBody(schema: ZodType) {
+  return (req: Request, res: Response, next: NextFunction) => {
     const result = schema.safeParse(req.body);
     if (!result.success) {
-      return next(new ValidationError("Invalid request body", result.error.issues));
+      return res.status(422).json({
+        message: "Invalid request body",
+        errors: result.error.issues,
+      });
     }
     req.body = result.data;
     next();
